@@ -1,43 +1,58 @@
-import { Film, Youtube, Instagram, Play } from "lucide-react";
+import { motion } from "motion/react";
+import { Instagram, Play } from "lucide-react";
 import { useAppContext } from "../context/AppContext";
+
+const COFFEE_PHOTOS = [
+  {
+    id: "v1",
+    src: "/photos/\u044f \u0438 \u043a\u043e\u0444\u0435/5262531387099649713_121.jpg",
+    alt: "Кофейный сетап: HiBREW H10A Plus и HiBREW G5",
+    shape: "shape-blob",
+  },
+  {
+    id: "v2",
+    src: "/photos/\u044f \u0438 \u043a\u043e\u0444\u0435/5262531387099649714_121.jpg",
+    alt: "Эспрессо-машина и кофемолка HiBREW",
+    shape: "shape-blob-slow",
+  },
+  {
+    id: "v3",
+    src: "/photos/\u044f \u0438 \u043a\u043e\u0444\u0435/A_low-angle_candid_shot_of_202606032028.jpeg",
+    alt: "Приготовление эспрессо дома",
+    shape: "shape-blob",
+  },
+];
+
+const CATEGORIES = (t: ReturnType<typeof useAppContext>["t"]) => [
+  { icon: "☕", label: t.coffeeCat1 },
+  { icon: "🔧", label: t.coffeeCat2 },
+  { icon: "🎬", label: t.coffeeCat3 },
+];
 
 export const Coffee = () => {
   const { t } = useAppContext();
-
-  const videos = [
-    {
-      id: "v1",
-      title: t.coffeeVid1,
-      category: "SETUP & WORKFLOW",
-      tag: "01 / STEP",
-      image: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?q=80&w=600&auto=format&fit=crop"
-    },
-    {
-      id: "v2",
-      title: t.coffeeVid2,
-      category: "GEAR REVIEW",
-      tag: "02 / GEAR",
-      image: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=600&auto=format&fit=crop"
-    },
-    {
-      id: "v3",
-      title: t.coffeeVid3,
-      category: "VISUAL ART",
-      tag: "03 / SLOW",
-      image: "https://images.unsplash.com/photo-151097252790b-a638d94e26f9?q=80&w=600&auto=format&fit=crop"
-    }
-  ];
+  const cats = CATEGORIES(t);
+  const titles = [t.coffeeVid1, t.coffeeVid2, t.coffeeVid3];
 
   return (
     <section
       id="coffee"
-      className="relative py-16 md:py-36 bg-transparent border-b border-text-primary/10"
+      className="relative py-20 md:py-36 bg-transparent border-b border-text-primary/10 overflow-hidden"
     >
-      <div className="max-w-7xl mx-auto px-6 md:px-12 space-y-16">
-        
-        {/* Header - Side Aligned on Desktop */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 items-end border-b border-text-primary/12 pb-8">
-          <div className="md:col-span-1 lg:col-span-4 space-y-2">
+      {/* Ambient */}
+      <div className="absolute bottom-0 right-[-5%] w-[45vw] h-[45vw] rounded-full bg-accent-blue/3 blur-[160px] pointer-events-none" />
+
+      <div className="max-w-7xl mx-auto px-6 md:px-12 space-y-16 relative z-10">
+
+        {/* ── Header ── */}
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 items-end border-b border-text-primary/12 pb-10"
+        >
+          <div className="lg:col-span-5 space-y-2">
             <span className="text-[10px] font-mono tracking-[0.4em] text-accent-blue block uppercase font-semibold">
               {t.coffeeSubtitle}
             </span>
@@ -45,80 +60,122 @@ export const Coffee = () => {
               {t.coffeeTitle}
             </h2>
           </div>
-          <div className="md:col-span-1 lg:col-span-4 lg:col-start-9 md:text-right">
-            <p className="text-sm text-text-primary/70 max-w-md md:ml-auto leading-relaxed font-sans">
+          <motion.div 
+            initial={{ opacity: 0, filter: "blur(10px)" }}
+            whileInView={{ opacity: 1, filter: "blur(0px)" }}
+            transition={{ delay: 0.2, duration: 0.8 }}
+            className="lg:col-span-5 lg:col-start-8"
+          >
+            <p className="text-sm text-text-primary/70 leading-relaxed font-sans">
               {t.coffeeDescription}
             </p>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
 
-        {/* Video Preview Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4">
-          {videos.map((vid) => (
-            <div
-              key={vid.id}
-              className="group relative bg-bg-accent/20 md:bg-bg-accent/40 border border-text-primary/10 rounded-2xl p-4 md:p-5 flex flex-col justify-between h-[300px] md:h-[340px] hover:border-accent-blue/40 transition-all duration-300 backdrop-blur-xs overflow-hidden"
+        {/* ── Categories ── */}
+        <motion.div 
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-50px" }}
+          variants={{ visible: { transition: { staggerChildren: 0.1 } }, hidden: {} }}
+          className="grid grid-cols-3 gap-4"
+        >
+          {cats.map((cat, i) => (
+            <motion.div
+              key={cat.label}
+              variants={{
+                hidden: { opacity: 0, y: 20, scale: 0.95 },
+                visible: { opacity: 1, y: 0, scale: 1 }
+              }}
+              whileHover={{ y: -5, scale: 1.02 }}
+              className="flex flex-col items-center gap-3 p-4 md:p-6 glass-card rounded-2xl text-center group cursor-default"
             >
-              {/* Thumbnail Container */}
-              <div className="relative h-[140px] md:h-[160px] w-full rounded-xl overflow-hidden border border-text-primary/8">
-                <img
-                  src={vid.image}
-                  alt={vid.title}
-                  className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500 filter contrast-[1.05] brightness-[0.9]"
-                  referrerPolicy="no-referrer"
-                />
-                <div className="absolute inset-0 bg-black/25 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <div className="w-10 h-10 rounded-full bg-accent-blue flex items-center justify-center text-bg-primary shadow-lg transform scale-90 group-hover:scale-100 transition-transform">
-                    <Play className="w-4 h-4 fill-current" />
-                  </div>
-                </div>
-                <div className="absolute top-2.5 right-2.5 bg-bg-primary/90 py-0.5 px-2 rounded-full border border-text-primary/10 font-mono text-[7px] uppercase tracking-wider text-text-primary/70">
-                  {vid.tag}
-                </div>
-              </div>
+              <span className="text-2xl group-hover:scale-125 transition-transform duration-300">{cat.icon}</span>
+              <span className="font-mono text-[10px] text-text-primary/70 uppercase tracking-widest leading-tight group-hover:text-text-primary transition-colors">
+                {cat.label}
+              </span>
+            </motion.div>
+          ))}
+        </motion.div>
 
-              {/* Text metadata */}
-              <div className="space-y-2 mt-4 flex-grow flex flex-col justify-between">
-                <div className="space-y-1">
-                  <span className="text-[8px] font-mono text-accent-blue tracking-widest uppercase font-semibold">
-                    {vid.category}
-                  </span>
-                  <h3 className="text-sm font-display font-bold leading-snug text-text-primary group-hover:text-accent-blue transition-colors line-clamp-2">
-                    {vid.title}
-                  </h3>
-                </div>
-                
-                {/* Visual duration indicator */}
-                <div className="flex items-center gap-1.5 pt-2 border-t border-text-primary/8 text-[9px] font-mono text-text-primary/40 uppercase">
-                  <Film className="w-3.5 h-3.5" />
-                  <span>PREVIEW SYSTEM // READY</span>
+        {/* ── Photos: Mobile carousel ── */}
+        <div className="md:hidden mobile-carousel no-scrollbar">
+          {COFFEE_PHOTOS.map((photo, idx) => (
+            <div key={photo.id} className="mobile-carousel-item group">
+              <div className={`relative aspect-[4/5] w-full ${photo.shape} overflow-hidden shadow-2xl bg-bg-accent/50 mb-4`}>
+                <img
+                  src={photo.src}
+                  alt={photo.alt}
+                  className="object-cover w-full h-full transition-transform duration-700 active:scale-105 filter brightness-[0.88]"
+                  loading="lazy"
+                />
+              </div>
+              <div className="px-1">
+                <h3 className="text-base font-display font-bold text-text-primary truncate">{titles[idx]}</h3>
+                <div className="flex items-center gap-1.5 mt-2">
+                  <Instagram className="w-3 h-3 text-text-primary/40" />
+                  <span className="font-mono text-[9px] text-text-primary/50 uppercase tracking-widest">@vanoshka_bull</span>
                 </div>
               </div>
             </div>
           ))}
         </div>
 
-        {/* CTA Buttons */}
-        <div className="flex flex-wrap gap-4 justify-center pt-8">
+        {/* ── Photos: Desktop grid ── */}
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={{ visible: { transition: { staggerChildren: 0.2 } }, hidden: {} }}
+          className="hidden md:grid md:grid-cols-3 gap-6"
+        >
+          {COFFEE_PHOTOS.map((photo, idx) => (
+            <motion.div
+              key={photo.id}
+              variants={{
+                hidden: { opacity: 0, y: 40, filter: "blur(15px)" },
+                visible: { opacity: 1, y: 0, filter: "blur(0px)" }
+              }}
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+              className="group"
+            >
+              <div className={`relative aspect-[4/5] w-full mb-6 ${photo.shape} overflow-hidden shadow-[0_20px_40px_rgba(0,0,0,0.15)] transition-all duration-700 group-hover:shadow-accent-blue/30 bg-bg-accent/50`}>
+                <img
+                  src={photo.src}
+                  alt={photo.alt}
+                  className="object-cover w-full h-full group-hover:scale-110 group-hover:rotate-1 transition-all duration-1000 filter brightness-[0.85] group-hover:brightness-100"
+                  loading="lazy"
+                />
+              </div>
+              <div className="px-2 space-y-3">
+                <h3 className="text-lg font-display font-bold leading-snug text-text-primary group-hover:text-accent-blue transition-colors duration-300">{titles[idx]}</h3>
+                <div className="flex items-center gap-2 pt-2 border-t border-text-primary/10">
+                  <Instagram className="w-3.5 h-3.5 text-text-primary/40" />
+                  <span className="font-mono text-[9px] text-text-primary/50 uppercase tracking-widest">@vanoshka_bull</span>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </motion.div>
+
+        {/* ── CTA ── */}
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.9 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.4, duration: 0.5 }}
+          className="flex justify-center pt-8"
+        >
           <a
-            href="https://youtube.com"
+            href="https://www.instagram.com/vanoshka_bull/"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex justify-center items-center gap-2 bg-text-primary text-bg-primary hover:bg-accent-blue text-xs font-mono font-bold tracking-widest px-8 py-4 uppercase transition-all rounded-full shadow-xs"
+            className="inline-flex items-center gap-2.5 bg-text-primary text-bg-primary hover:bg-accent-blue px-8 py-4 rounded-full font-mono text-xs font-bold tracking-widest uppercase transition-all duration-300 shadow-xl hover:shadow-accent-blue/30 hover:-translate-y-1"
           >
-            <Youtube className="w-4 h-4" />
+            <Instagram className="w-4 h-4" />
             <span>{t.coffeeBtn}</span>
           </a>
-          <a
-            href="https://instagram.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex justify-center items-center gap-2 border border-text-primary hover:bg-text-primary/5 text-text-primary text-xs font-mono tracking-widest px-8 py-4 uppercase transition-all rounded-full"
-          >
-            <Instagram className="w-4 h-4 text-accent-blue" />
-            <span>{t.coffeeBtnIg}</span>
-          </a>
-        </div>
+        </motion.div>
 
       </div>
     </section>
