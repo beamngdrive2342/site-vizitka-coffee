@@ -1,0 +1,6 @@
+{
+  "name": "VOLTA Coffee",
+  "description": "A luxury cinematic specialty coffee experience website on a dark theme.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

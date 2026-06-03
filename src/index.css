@@ -1,0 +1,140 @@
+@import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@350;400;600;700;800;900&family=Space+Grotesk:wght@350;400;500;600;700&family=Syne:wght@700;800&family=Outfit:wght@500;700;800;900&display=swap');
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --bg-primary: #FFF8ED;
+    --bg-accent: #FFF9F0;
+    --text-primary: #312726;
+    --accent-blue: #D97706;
+    --border-espresso: rgba(49, 39, 38, 0.12);
+    --border-espresso-heavy: rgba(49, 39, 38, 0.3);
+    --bg-primary-rgb: 255, 248, 237;
+    --text-primary-rgb: 49, 39, 38;
+    --stream-blur: rgba(49, 39, 38, 0.15);
+  }
+
+  .dark {
+    --bg-primary: #12100e;
+    --bg-accent: #1a1715;
+    --text-primary: #f0e6d2;
+    --accent-blue: #F59E0B;
+    --border-espresso: rgba(240, 230, 210, 0.12);
+    --border-espresso-heavy: rgba(240, 230, 210, 0.3);
+    --bg-primary-rgb: 18, 16, 14;
+    --text-primary-rgb: 240, 230, 210;
+    --stream-blur: rgba(240, 230, 210, 0.05);
+  }
+}
+
+@theme {
+  --color-bg-primary: var(--bg-primary);
+  --color-bg-accent: var(--bg-accent);
+  --color-text-primary: var(--text-primary);
+  --color-accent-blue: var(--accent-blue);
+  --color-border-espresso: var(--border-espresso);
+  --color-border-espresso-heavy: var(--border-espresso-heavy);
+  --color-white: #FFFFFF;
+
+  --font-sans: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Unbounded", sans-serif;
+  --font-extended: "Unbounded", sans-serif;
+  --font-bold-brand: "Unbounded", sans-serif;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    background-color: var(--bg-primary);
+  }
+  
+  body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    font-family: var(--font-sans);
+  }
+
+  /* Custom scrollbar for beautiful premium coffee feeling */
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--bg-primary);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--border-espresso);
+    border-radius: 9px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--text-primary);
+  }
+}
+
+/* Custom noise overlay to match jeskojets-style luxury feel */
+.noise-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  content: "";
+  opacity: 0.04;
+  z-index: 9999;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+/* Custom clip animation for jeskojets-like split text hover effect on buttons */
+.btn-double-text {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-double-text .text-original {
+  display: block;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-double-text .text-hover {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  display: block;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-double-text:hover .text-original {
+  transform: translateY(-100%);
+}
+
+.btn-double-text:hover .text-hover {
+  transform: translateY(-100%);
+}
+
+/* Smooth slow keyframe animation for ambient light glows */
+@keyframes ambient-float {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.3;
+  }
+  33% {
+    transform: translate(40px, -30px) scale(1.15);
+    opacity: 0.45;
+  }
+  66% {
+    transform: translate(-30px, 40px) scale(0.9);
+    opacity: 0.25;
+  }
+}
+
+.animate-ambient-1 {
+  animation: ambient-float 15s infinite ease-in-out;
+}
+
+.animate-ambient-2 {
+  animation: ambient-float 20s infinite ease-in-out reverse;
+}
+
