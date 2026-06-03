@@ -15,7 +15,7 @@ export const useScrollProgress = () => {
       }
       setScrolled(currentScroll > 40);
 
-      const sections = ["about", "coffee", "cycling", "links"];
+      const sections = ["about", "coffee", "cycling", "gear", "links"];
       for (const section of sections) {
         const el = document.getElementById(section);
         if (el) {
