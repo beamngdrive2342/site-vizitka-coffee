@@ -86,34 +86,6 @@
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
 }
 
-/* Custom clip animation for jeskojets-like split text hover effect on buttons */
-.btn-double-text {
-  position: relative;
-  overflow: hidden;
-}
-
-.btn-double-text .text-original {
-  display: block;
-  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.btn-double-text .text-hover {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  width: 100%;
-  display: block;
-  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.btn-double-text:hover .text-original {
-  transform: translateY(-100%);
-}
-
-.btn-double-text:hover .text-hover {
-  transform: translateY(-100%);
-}
-
 /* Smooth slow keyframe animation for ambient light glows */
 @keyframes ambient-float {
   0%, 100% {
@@ -136,5 +108,116 @@
 
 .animate-ambient-2 {
   animation: ambient-float 20s infinite ease-in-out reverse;
+}
+
+/* ── Custom Photo Shapes ── */
+.shape-blob {
+  border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+  animation: morph 8s ease-in-out infinite;
+  -webkit-mask-image: -webkit-radial-gradient(white, black);
+  isolation: isolate;
+}
+
+.shape-blob-slow {
+  border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+  animation: morph 12s ease-in-out infinite reverse;
+  -webkit-mask-image: -webkit-radial-gradient(white, black);
+  isolation: isolate;
+}
+
+@keyframes morph {
+  0%, 100% {
+    border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+  }
+  34% {
+    border-radius: 70% 30% 50% 50% / 30% 30% 70% 70%;
+  }
+  67% {
+    border-radius: 100% 60% 60% 100% / 100% 100% 60% 60%;
+  }
+}
+
+.shape-zigzag {
+  clip-path: polygon(
+    0% 5%, 5% 0%, 95% 0%, 100% 5%, 100% 95%, 95% 100%, 5% 100%, 0% 95%
+  );
+}
+
+.shape-slanted {
+  clip-path: polygon(5% 0%, 100% 5%, 95% 100%, 0% 95%);
+}
+
+/* ── Glassmorphism Card ── */
+.glass-card {
+  background: rgba(var(--bg-primary-rgb), 0.2);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(var(--text-primary-rgb), 0.08);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(var(--text-primary-rgb), 0.06);
+  transition: border-color 0.4s ease, box-shadow 0.4s ease, transform 0.3s ease;
+}
+.glass-card:hover {
+  border-color: rgba(var(--text-primary-rgb), 0.2);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(var(--text-primary-rgb), 0.1);
+}
+
+/* ── No-Scrollbar (hides scrollbar on all browsers) ── */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* ── Mobile Carousel (only applies on small screens) ── */
+@media (max-width: 767px) {
+  .mobile-carousel {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+    gap: 1rem;
+    padding-bottom: 1.5rem;
+    /* Prevent vertical scroll interference */
+    overscroll-behavior-x: contain;
+  }
+  .mobile-carousel-item {
+    flex-shrink: 0;
+    width: 85%;
+    scroll-snap-align: center;
+    scroll-snap-stop: always; /* Prevents fast fly-by, making scroll feel slower and more deliberate */
+  }
+  /* Text inside carousel items must not overflow */
+  .mobile-carousel-item * {
+    max-width: 100%;
+    word-break: break-word;
+    overflow-wrap: break-word;
+  }
+}
+
+/* ── Desktop nav link hover underline animation ── */
+.nav-link-animated {
+  position: relative;
+  display: inline-block;
+}
+.nav-link-animated::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1.5px;
+  background: var(--accent-blue);
+  transition: width 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.nav-link-animated:hover::after {
+  width: 100%;
+}
+
+/* ── Section text overflow guard ── */
+section {
+  overflow-x: hidden;
 }
 
