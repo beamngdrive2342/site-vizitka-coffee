@@ -1,102 +1,194 @@
-import { ArrowDown, Instagram, Film, Bike } from "lucide-react";
+import { useRef, useEffect } from "react";
+import { Send, Instagram, ArrowDown } from "lucide-react";
 import { useAppContext } from "../context/AppContext";
-import { useMousePosition } from "../hooks/useMousePosition";
+
+const VIDEO_SRC = "/espresso.mp4";
+const FALLBACK_IMG = "/photos/\u044f \u0438 \u043a\u043e\u0444\u0435/A_low-angle_candid_shot_of_202606032028.jpeg";
 
 export const Hero = () => {
   const { t } = useAppContext();
-  const mousePosition = useMousePosition();
+  const sectionRef = useRef<HTMLElement>(null);
+  const mainVideoRef = useRef<HTMLVideoElement>(null);
+  const blurVideoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          // When the section comes back into view, replay the videos from the start
+          if (entry.isIntersecting) {
+            if (mainVideoRef.current) {
+              mainVideoRef.current.currentTime = 0;
+              mainVideoRef.current.play().catch(() => {});
+            }
+            if (blurVideoRef.current) {
+              blurVideoRef.current.currentTime = 0;
+              blurVideoRef.current.play().catch(() => {});
+            }
+          }
+        });
+      },
+      { threshold: 0.1 } // triggers when 10% of Hero is visible
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <section
+      ref={sectionRef}
       id="hero"
-      className="relative min-h-[100svh] flex flex-col justify-between pt-28 md:pt-36 pb-8 md:pb-12 overflow-hidden bg-transparent border-b border-text-primary/10"
+      className="relative min-h-[100svh] flex flex-col justify-between pt-28 md:pt-36 pb-8 md:pb-12 overflow-hidden border-b border-text-primary/10"
     >
-      {/* Ambient background glows */}
+      {/* ── Video background with cinematic blur-sides effect ── */}
+      <div className="absolute inset-0 z-0 overflow-hidden">
+
+        {/* The video itself — centered, slightly shrunk, not edge-to-edge */}
+        <div className="absolute inset-0 flex items-center justify-center">
+          <video
+            ref={mainVideoRef}
+            autoPlay
+            muted
+            playsInline
+            poster={FALLBACK_IMG}
+            className="w-full h-full object-cover scale-105"
+            style={{ filter: "brightness(0.32) saturate(0.75)" }}
+          >
+            <source src={VIDEO_SRC} type="video/mp4" />
+          </video>
+        </div>
+
+        {/* Blurred ghost copy — fills sides, sits behind main video */}
+        <div
+          className="absolute inset-0 -z-10 scale-150"
+          style={{ filter: "blur(40px) brightness(0.15) saturate(0.5)" }}
+        >
+          <video
+            ref={blurVideoRef}
+            autoPlay
+            muted
+            playsInline
+            className="w-full h-full object-cover"
+          >
+            <source src={VIDEO_SRC} type="video/mp4" />
+          </video>
+        </div>
+
+        {/* Heavy blur overlay on left and right edges only */}
+        <div
+          className="hidden md:block absolute inset-y-0 left-0 w-[22%] z-10 pointer-events-none"
+          style={{
+            background:
+              "linear-gradient(to right, var(--color-bg-primary) 0%, var(--color-bg-primary)/80 40%, transparent 100%)",
+          }}
+        />
+        <div
+          className="hidden md:block absolute inset-y-0 right-0 w-[22%] z-10 pointer-events-none"
+          style={{
+            background:
+              "linear-gradient(to left, var(--color-bg-primary) 0%, var(--color-bg-primary)/80 40%, transparent 100%)",
+          }}
+        />
+
+        {/* Top & bottom gradients */}
+        <div className="absolute inset-0 z-10 bg-gradient-to-b from-bg-primary/75 via-transparent to-bg-primary/88 pointer-events-none" />
+
+        {/* Glassmorphism blur strip on the sides via backdrop-filter */}
+        <div
+          className="hidden md:block absolute inset-y-0 left-0 w-[18%] z-10 pointer-events-none"
+          style={{ backdropFilter: "blur(24px)" }}
+        />
+        <div
+          className="hidden md:block absolute inset-y-0 right-0 w-[18%] z-10 pointer-events-none"
+          style={{ backdropFilter: "blur(24px)" }}
+        />
+      </div>
+
+      {/* ── Ambient glows ── */}
       <div className="absolute inset-0 pointer-events-none z-0">
-        <div className="absolute -top-[10%] left-[25%] w-[45vw] h-[45vw] rounded-full bg-radial from-accent-blue/5 via-transparent to-transparent blur-[120px]" />
-        <div className="absolute bottom-[5%] right-[15%] w-[40vw] h-[40vw] rounded-full bg-radial from-text-primary/5 via-transparent to-transparent blur-[140px]" />
+        <div className="absolute top-[15%] left-[10%] w-[40vw] h-[40vw] rounded-full bg-accent-blue/4 blur-[140px] animate-ambient-1" />
+        <div className="absolute bottom-[10%] right-[5%] w-[35vw] h-[35vw] rounded-full bg-accent-blue/3 blur-[160px] animate-ambient-2" />
       </div>
 
-      <div className="relative max-w-7xl mx-auto px-6 md:px-12 w-full flex-grow grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-12 items-center z-10 my-auto">
-        
-        {/* Left Column: Big bold name and tagline */}
-        <div 
-          className="md:col-span-1 lg:col-span-4 space-y-4 md:space-y-6 text-left md:pr-4 lg:pr-8"
-          style={{ transform: `translate(${mousePosition.x * 0.4}px, ${mousePosition.y * 0.4}px)` }}
-        >
-          <div className="inline-flex items-center gap-2 bg-text-primary/5 border border-text-primary/12 px-3.5 py-1.5 rounded-full text-[10px] tracking-widest font-mono uppercase text-text-primary/70">
+      {/* ── Main content ── */}
+      <div className="relative max-w-7xl mx-auto px-6 md:px-12 w-full flex-grow flex flex-col justify-center z-20">
+
+        {/* Location badge */}
+        <div className="mb-6 md:mb-8">
+          <div className="inline-flex items-center gap-2 bg-text-primary/8 border border-text-primary/12 px-3.5 py-1.5 rounded-full text-[10px] tracking-widest font-mono uppercase text-text-primary/70">
             <span className="w-1.5 h-1.5 rounded-full bg-accent-blue animate-pulse" />
-            <span>{t.heroSubtitle}</span>
+            <span>SPB // 59.93° N, 30.33° E</span>
           </div>
-
-          <h1 className="text-4xl sm:text-6xl lg:text-8xl font-display font-black tracking-tight text-text-primary leading-[0.9] uppercase">
-            {t.heroTitlePart1} <br />
-            <span className="italic font-normal font-serif text-accent-blue lowercase">{t.heroTitleItalic}</span>
-          </h1>
-
-          <p className="text-sm sm:text-base text-text-primary/80 leading-relaxed font-sans max-w-md">
-            {t.heroDescription}
-          </p>
         </div>
 
-        {/* Right Column: CTA buttons and links */}
-        <div 
-          className="md:col-span-1 lg:col-span-4 lg:col-start-9 space-y-6 md:space-y-8 text-left md:text-right flex flex-col items-start md:items-end md:pl-8"
-          style={{ transform: `translate(${-mousePosition.x * 0.3}px, ${-mousePosition.y * 0.3}px)` }}
-        >
-          <div className="space-y-4 w-full max-w-md">
-            <p className="text-xs font-mono text-text-primary/40 uppercase tracking-widest leading-relaxed">
-              [ QUICK NAVIGATION // БЫСТРЫЙ ДОСТУП ]
-            </p>
-            
-            <div className="flex flex-col gap-3">
-              <a
-                href="#coffee"
-                className="inline-flex justify-between items-center gap-4 bg-bg-accent/80 border border-text-primary/10 hover:border-accent-blue/40 text-text-primary text-xs font-mono tracking-widest p-4 uppercase transition-all rounded-xl backdrop-blur-xs group"
-              >
-                <span className="flex items-center gap-2">
-                  <Film className="w-4 h-4 text-accent-blue" />
-                  <span>КОФЕЙНЫЙ БЛОГ</span>
-                </span>
-                <span className="text-accent-blue group-hover:translate-x-1 transition-transform">→</span>
-              </a>
+        {/* Big name */}
+        <h1 className="text-[clamp(3.5rem,12vw,9rem)] font-display font-black tracking-tight text-text-primary leading-[0.88] uppercase mb-6 md:mb-8">
+          {t.heroTitlePart1}
+          <br />
+          <span className="italic font-normal font-serif text-accent-blue lowercase tracking-normal">
+            {t.heroTitleItalic}
+          </span>
+        </h1>
 
-              <a
-                href="#cycling"
-                className="inline-flex justify-between items-center gap-4 bg-bg-accent/80 border border-text-primary/10 hover:border-accent-blue/40 text-text-primary text-xs font-mono tracking-widest p-4 uppercase transition-all rounded-xl backdrop-blur-xs group"
-              >
-                <span className="flex items-center gap-2">
-                  <Bike className="w-4 h-4 text-accent-blue" />
-                  <span>ВЕЛОСИПЕДНЫЕ БУДНИ</span>
-                </span>
-                <span className="text-accent-blue group-hover:translate-x-1 transition-transform">→</span>
-              </a>
+        {/* Manifesto */}
+        <p className="text-lg sm:text-xl md:text-2xl text-text-primary/85 leading-relaxed font-sans max-w-xl mb-8 md:mb-12 font-light">
+          {t.heroManifesto}
+        </p>
 
-              <a
-                href="https://instagram.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex justify-between items-center gap-4 bg-text-primary text-bg-primary hover:bg-accent-blue text-xs font-mono tracking-widest p-4 uppercase transition-all rounded-xl font-bold group"
-              >
-                <span className="flex items-center gap-2">
-                  <Instagram className="w-4 h-4" />
-                  <span>МОЙ INSTAGRAM</span>
-                </span>
-                <span className="group-hover:translate-x-1 transition-transform">→</span>
-              </a>
-            </div>
-          </div>
+        {/* CTA buttons */}
+        <div className="flex flex-wrap gap-3 md:gap-4">
+          <a
+            id="hero-cta-telegram"
+            href="https://t.me/VahnoBull"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2.5 bg-text-primary text-bg-primary hover:bg-accent-blue px-6 py-3.5 rounded-full font-mono text-xs tracking-widest uppercase transition-all duration-300 font-bold shadow-lg hover:shadow-accent-blue/20"
+          >
+            <Send className="w-4 h-4" />
+            <span>{t.heroCta1}</span>
+          </a>
+          <a
+            id="hero-cta-instagram"
+            href="https://www.instagram.com/vanoshka_bull/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2.5 bg-transparent border border-text-primary/30 hover:border-text-primary/70 text-text-primary/80 hover:text-text-primary px-6 py-3.5 rounded-full font-mono text-xs tracking-widest uppercase transition-all duration-300 backdrop-blur-sm"
+          >
+            <Instagram className="w-4 h-4" />
+            <span>{t.heroCta2}</span>
+          </a>
+        </div>
+
+        {/* Section anchors */}
+        <div className="flex items-center gap-6 mt-10 md:mt-14">
+          {[
+            { href: "#coffee", label: "Кофе" },
+            { href: "#cycling", label: "Велосипед" },
+            { href: "#links", label: "Контакты" },
+          ].map((anchor) => (
+            <a
+              key={anchor.href}
+              href={anchor.href}
+              className="font-mono text-[10px] tracking-widest text-text-primary/40 hover:text-accent-blue uppercase transition-colors"
+            >
+              {anchor.label}
+            </a>
+          ))}
         </div>
       </div>
 
-      {/* Hero bottom metadata */}
-      <div className="relative max-w-7xl mx-auto px-6 md:px-12 w-full flex justify-between items-center z-10 text-[10px] font-mono text-text-primary/40 pt-6 border-t border-text-primary/5">
-        <div>
-          <span>SPB // 59.93° N, 30.33° E</span>
-        </div>
-        <a href="#about" className="flex items-center gap-2 hover:text-accent-blue transition-colors group">
-          <span className="tracking-widest">{t.heroScrollDown}</span>
-          <ArrowDown className="w-3 h-3 text-text-primary group-hover:translate-y-1 transition-transform animate-bounce" />
+      {/* ── Scroll indicator ── */}
+      <div className="relative max-w-7xl mx-auto px-6 md:px-12 w-full flex justify-end items-center z-20 pt-6 border-t border-text-primary/5">
+        <a
+          href="#about"
+          className="flex items-center gap-2 text-[10px] font-mono text-text-primary/40 hover:text-accent-blue transition-colors group"
+        >
+          <span className="tracking-widest uppercase">Прокрутить</span>
+          <ArrowDown className="w-3 h-3 group-hover:translate-y-1 transition-transform animate-bounce" />
         </a>
       </div>
     </section>
