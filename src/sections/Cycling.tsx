@@ -53,9 +53,10 @@ export const Cycling = () => {
             </h2>
           </div>
           <motion.div 
-            initial={{ opacity: 0, filter: "blur(10px)" }}
-            whileInView={{ opacity: 1, filter: "blur(0px)" }}
+            initial={{ opacity: 0, y: 15 }}
+            whileInView={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 0.8 }}
+            style={{ willChange: "transform, opacity" }}
             className="lg:col-span-5 lg:col-start-8"
           >
             <p className="text-sm text-text-primary/70 leading-relaxed font-sans">
@@ -154,8 +155,9 @@ export const Cycling = () => {
           {CYCLING_PHOTOS.map((ph, idx) => (
             <motion.div
               key={ph.id}
-              variants={{ hidden: { opacity: 0, y: 40, filter: "blur(15px)" }, visible: { opacity: 1, y: 0, filter: "blur(0px)" } }}
+              variants={{ hidden: { opacity: 0, y: 40, scale: 0.95 }, visible: { opacity: 1, y: 0, scale: 1 } }}
               transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+              style={{ willChange: "transform, opacity" }}
               className={`relative ${ph.shape} bg-bg-accent/40 overflow-hidden shadow-[0_15px_35px_rgba(0,0,0,0.12)] group ${
                 idx === 0 ? "aspect-[4/5]" : "aspect-square"
               }`}
