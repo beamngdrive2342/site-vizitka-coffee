@@ -116,6 +116,7 @@
   animation: morph 8s ease-in-out infinite;
   -webkit-mask-image: -webkit-radial-gradient(white, black);
   isolation: isolate;
+  will-change: border-radius;
 }
 
 .shape-blob-slow {
@@ -123,6 +124,7 @@
   animation: morph 12s ease-in-out infinite reverse;
   -webkit-mask-image: -webkit-radial-gradient(white, black);
   isolation: isolate;
+  will-change: border-radius;
 }
 
 @keyframes morph {
@@ -155,6 +157,7 @@
   border: 1px solid rgba(var(--text-primary-rgb), 0.08);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(var(--text-primary-rgb), 0.06);
   transition: border-color 0.4s ease, box-shadow 0.4s ease, transform 0.3s ease;
+  will-change: transform, opacity;
 }
 .glass-card:hover {
   border-color: rgba(var(--text-primary-rgb), 0.2);
