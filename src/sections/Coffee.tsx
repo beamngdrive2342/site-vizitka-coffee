@@ -61,9 +61,10 @@ export const Coffee = () => {
             </h2>
           </div>
           <motion.div 
-            initial={{ opacity: 0, filter: "blur(10px)" }}
-            whileInView={{ opacity: 1, filter: "blur(0px)" }}
+            initial={{ opacity: 0, y: 15 }}
+            whileInView={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 0.8 }}
+            style={{ willChange: "transform, opacity" }}
             className="lg:col-span-5 lg:col-start-8"
           >
             <p className="text-sm text-text-primary/70 leading-relaxed font-sans">
@@ -133,10 +134,11 @@ export const Coffee = () => {
             <motion.div
               key={photo.id}
               variants={{
-                hidden: { opacity: 0, y: 40, filter: "blur(15px)" },
-                visible: { opacity: 1, y: 0, filter: "blur(0px)" }
+                hidden: { opacity: 0, y: 40, scale: 0.95 },
+                visible: { opacity: 1, y: 0, scale: 1 }
               }}
               transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+              style={{ willChange: "transform, opacity" }}
               className="group"
             >
               <div className={`relative aspect-[4/5] w-full mb-6 ${photo.shape} overflow-hidden shadow-[0_20px_40px_rgba(0,0,0,0.15)] transition-all duration-700 group-hover:shadow-accent-blue/30 bg-bg-accent/50`}>
