@@ -9,7 +9,6 @@ export const Hero = () => {
   const { t } = useAppContext();
   const sectionRef = useRef<HTMLElement>(null);
   const mainVideoRef = useRef<HTMLVideoElement>(null);
-  const blurVideoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -20,10 +19,6 @@ export const Hero = () => {
             if (mainVideoRef.current) {
               mainVideoRef.current.currentTime = 0;
               mainVideoRef.current.play().catch(() => {});
-            }
-            if (blurVideoRef.current) {
-              blurVideoRef.current.currentTime = 0;
-              blurVideoRef.current.play().catch(() => {});
             }
           }
         });
@@ -48,35 +43,31 @@ export const Hero = () => {
       <div className="absolute inset-0 z-0 overflow-hidden">
 
         {/* The video itself — centered, slightly shrunk, not edge-to-edge */}
-        <div className="absolute inset-0 flex items-center justify-center">
+        <div className="absolute inset-0 flex items-center justify-center bg-[#12100e]">
           <video
             ref={mainVideoRef}
             autoPlay
             muted
             playsInline
-            poster={FALLBACK_IMG}
             className="w-full h-full object-cover scale-105"
-            style={{ filter: "brightness(0.32) saturate(0.75)" }}
           >
             <source src={VIDEO_SRC} type="video/mp4" />
           </video>
+          {/* Light-weight dark overlay to dim the video without expensive CSS filters */}
+          <div className="absolute inset-0 bg-[#12100e]/68 pointer-events-none" />
         </div>
 
         {/* Blurred ghost copy — fills sides, sits behind main video */}
         <div
-          className="absolute inset-0 -z-10 scale-150"
-          style={{ filter: "blur(40px) brightness(0.15) saturate(0.5)" }}
-        >
-          <video
-            ref={blurVideoRef}
-            autoPlay
-            muted
-            playsInline
-            className="w-full h-full object-cover"
-          >
-            <source src={VIDEO_SRC} type="video/mp4" />
-          </video>
-        </div>
+          className="absolute inset-0 -z-10 scale-150 pointer-events-none"
+          style={{
+            backgroundImage: `url(${FALLBACK_IMG})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            filter: "blur(40px) brightness(0.15) saturate(0.5)",
+            willChange: "transform"
+          }}
+        />
 
         {/* Heavy blur overlay on left and right edges only */}
         <div
