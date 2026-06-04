@@ -1,5 +1,6 @@
 import { motion } from "motion/react";
 import { useAppContext } from "../context/AppContext";
+import type { Key } from "react";
 
 const COFFEE_GEAR = [
   {
@@ -56,6 +57,8 @@ const CYCLING_GEAR = [
 ];
 
 interface GearItemProps {
+  key?: Key;
+  id?: string;
   emoji: string;
   name: string;
   desc: string;
@@ -65,7 +68,8 @@ interface GearItemProps {
 
 const GearItemDesktop = ({ emoji, name, desc, img, shape }: GearItemProps) => (
   <motion.div 
-    variants={{ hidden: { opacity: 0, x: -20, filter: "blur(5px)" }, visible: { opacity: 1, x: 0, filter: "blur(0px)" } }}
+    variants={{ hidden: { opacity: 0, x: -20 }, visible: { opacity: 1, x: 0 } }}
+    style={{ willChange: "transform, opacity" }}
     className="group flex items-start gap-5 p-5 glass-card rounded-2xl w-full"
   >
     {img ? (
