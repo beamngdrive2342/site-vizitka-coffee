@@ -37,19 +37,21 @@ export const About = () => {
           {/* Swipe photos */}
           <div className="mobile-carousel no-scrollbar mb-8">
             <motion.div
-              initial={{ opacity: 0, filter: "blur(15px)" }}
-              whileInView={{ opacity: 1, filter: "blur(0px)" }}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.9 }}
+              style={{ willChange: "transform, opacity" }}
               className="mobile-carousel-item aspect-[4/5] shape-blob overflow-hidden shadow-2xl"
             >
               <img src={ME_PHOTO} alt="Иван" className="w-full h-full object-cover" loading="lazy" />
             </motion.div>
             <motion.div
-              initial={{ opacity: 0, filter: "blur(15px)" }}
-              whileInView={{ opacity: 1, filter: "blur(0px)" }}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.9, delay: 0.1 }}
+              style={{ willChange: "transform, opacity" }}
               className="mobile-carousel-item aspect-square shape-blob-slow overflow-hidden shadow-xl"
             >
               <img src={COFFEE_PHOTO} alt="Кофе" className="w-full h-full object-cover" loading="lazy" />
@@ -88,11 +90,12 @@ export const About = () => {
           {/* Left: photos stacked */}
           <div className="lg:col-span-6 space-y-10">
             <motion.div
-              initial={{ opacity: 0, scale: 0.85, filter: "blur(20px)" }}
-              whileInView={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+              initial={{ opacity: 0, scale: 0.95, y: 25 }}
+              whileInView={{ opacity: 1, scale: 1, y: 0 }}
               viewport={{ once: true, margin: "-100px" }}
               transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
               whileHover={{ scale: 1.03 }}
+              style={{ willChange: "transform, opacity" }}
               className="relative aspect-[4/5] w-full group shape-blob overflow-hidden shadow-2xl"
             >
               <img src={ME_PHOTO} alt="Иван — автор блога"
@@ -100,11 +103,12 @@ export const About = () => {
                 loading="lazy" />
             </motion.div>
             <motion.div
-              initial={{ opacity: 0, scale: 0.85, filter: "blur(20px)" }}
-              whileInView={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+              initial={{ opacity: 0, scale: 0.95, y: 25 }}
+              whileInView={{ opacity: 1, scale: 1, y: 0 }}
               viewport={{ once: true, margin: "-50px" }}
               transition={{ duration: 1.2, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
               whileHover={{ scale: 1.03 }}
+              style={{ willChange: "transform, opacity" }}
               className="relative aspect-square w-[90%] ml-auto group shape-blob-slow overflow-hidden shadow-xl"
             >
               <img src={COFFEE_PHOTO} alt="Иван за приготовлением эспрессо"
@@ -125,8 +129,8 @@ export const About = () => {
               {[t.aboutP1, t.aboutP2, t.aboutP3].map((text, i) => (
                 <motion.p key={i}
                   variants={{
-                    hidden: { opacity: 0, y: 20, filter: "blur(8px)" },
-                    visible: { opacity: 1, y: 0, filter: "blur(0px)" }
+                    hidden: { opacity: 0, y: 20 },
+                    visible: { opacity: 1, y: 0 }
                   }}
                   transition={{ duration: 0.8 }}
                   className="text-base sm:text-lg text-text-primary/80 leading-relaxed font-sans"
@@ -137,11 +141,12 @@ export const About = () => {
             </motion.div>
 
             <motion.div
-              initial={{ opacity: 0, x: 30, filter: "blur(10px)" }}
-              whileInView={{ opacity: 1, x: 0, filter: "blur(0px)" }}
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 1 }}
               whileHover={{ y: -5 }}
+              style={{ willChange: "transform, opacity" }}
               className="relative p-6 md:p-8 glass-card rounded-3xl overflow-hidden group"
             >
               <div className="absolute top-0 right-0 w-32 h-32 rounded-full bg-accent-blue/10 blur-2xl pointer-events-none group-hover:bg-accent-blue/20 transition-all duration-700" />
